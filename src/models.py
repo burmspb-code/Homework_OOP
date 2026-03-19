@@ -8,15 +8,44 @@ class Product:
     Attributes:
       name: str - Название товара.
       description: str - Описание товара.
-      price: float - Цена товара.
+      __price: float - Цена товара (приватный атрибут).
       quantity: int - Количество товара в наличии.
     """
 
     def __init__(self, name: str, description: str, price: float, quantity: int):
         self.name = name
         self.description = description
-        self.price = price
+        self.__price = price
         self.quantity = quantity
+
+    @classmethod
+    def new_product(cls, params: dict, products_list: list = None):
+        """Принимает параметры товара в словаре и возвращает созданный объект класса Product."""
+        if products_list:
+            for product in products_list:
+                if product.name == params.get("name"):  # Если такой товар уже есть.
+                    product.quantity += params.get("quantity") # Добавляем количество.
+                    product.price = max(product.price, params.get("price"))  # Берем максимальную цену.
+                    return product
+
+        return cls(**params)
+
+    @property
+    def price(self):
+        """Получаем цену проукта."""
+        return self.__price
+
+    @price.setter
+    def price(self, price: float):
+        """Устанавливаем цену проукта."""
+        if price <= 0:
+            print("Цена не должна быть нулевая или отрицательная")
+        elif price < self.__price:
+             answer = input("y/n : ")
+             if answer == "y":
+                self.__price = price
+        else:
+            self.__price = price
 
 
 class Category:
@@ -25,10 +54,9 @@ class Category:
     Attributes:
       name: str - Название категории.
       description: str - Описание товара.
-      products: str - Список товаров категории.
+      __products: str - Список товаров категории (приватный аргумент).
       category_count: int - Обший счетчик категорий товаров (атрибус класса).
-      product_count: int - Общий счетчик товаров.
-
+      product_count: int - Общий счетчик товаров (атрибус класса).
     """
 
     category_count: int = 0
@@ -37,10 +65,20 @@ class Category:
     def __init__(self, name: str, description: str, products: list):
         self.name = name
         self.description = description
-        self.products = products
+        self.__products = products
 
         Category.category_count += 1  # Увеличиваем счетчик категорий
         Category.product_count += len(products)  # Подсчитываем общее количество товаров
+
+    def add_product(self, product: Product):
+        """Добавление товара в список товаров."""
+        self.__products.append(product)
+        Category.product_count += 1
+
+    @property
+    def products(self):
+        """Возвращает список товаров."""
+        return [f"{prod.name}, {prod.price} руб. Остаток: {prod.quantity} шт.\n" for prod in self.__products]
 
 
 def load_object_from_json(
