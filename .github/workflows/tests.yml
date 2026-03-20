@@ -2,7 +2,7 @@ name: CI/CD - Build, Test and Deploy
 
 on:
   push:
-    branches: [ "main" ] # Укажите вашу основную ветку
+    branches: [ "main", "feature/**" ] # Укажите вашу основную ветку
 
 permissions:
   contents: write # Нужно для публикации в gh-pages
