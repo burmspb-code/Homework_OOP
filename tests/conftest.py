@@ -45,3 +45,28 @@ def json_data() -> list[dict]:
             ],
         }
     ]
+
+@pytest.fixture
+def product_data_1() -> dict:
+    """Возвращает тестовый проукт как словарь."""
+    return {
+        "name": "Samsung S23",
+        "description": "256GB",
+        "price": 80000.0,
+        "quantity": 10,
+    }
+
+@pytest.fixture
+def product_data_2() -> dict:
+    """Возвращает тестовый проукт как словарь."""
+    return {
+        "name": "Iphone 15",
+        "description": "512GB, Gray",
+        "price": 190000.0,
+        "quantity": 10,
+    }
+
+@pytest.fixture
+def product_data_3() -> Product:
+    """Возвразщает обоъект класса Product."""
+    return Product("Iphone 15", "Gray", 200000.0, 10)
