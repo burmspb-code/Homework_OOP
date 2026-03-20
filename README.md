@@ -21,12 +21,8 @@
 ### Проверяемые области:
 * **Models** — проверка логики инициализации и методов классов.
 
-## 📊 Отчет о покрытии
-![Coverage Badge](https://img.shields.io) 
-
 Вы можете просмотреть подробный интерактивный отчет о покрытии кода тестами по ссылке:  
-[👉 Посмотреть Coverage Report](https://burmspb-code.github.io/Homework_OOP/coverage/)
-
+<a href="https://burmspb-code.github.io/Homework_OOP/coverage/" target="_blank">👉 Посмотреть Coverage Report</a>
 
 
 **Используемые модули:**
