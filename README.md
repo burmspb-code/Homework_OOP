@@ -1,6 +1,6 @@
 # Проект CodeMarket
 ## Цель проекта:
-### ***Раозработка ядра для интернет-магазина.***
+### ***Разработка ядра для интернет-магазина.***
 **Инструкция по установке:**
 
 Для работы проекта требуется [Poetry](https://python-poetry.org/).
@@ -25,7 +25,7 @@
 ![Coverage Badge](https://img.shields.io) 
 
 Вы можете просмотреть подробный интерактивный отчет о покрытии кода тестами по ссылке:  
-[👉 Посмотреть Coverage Report](https://burmspb-code.github.io)
+[👉 Посмотреть Coverage Report](https://burmspb-code.github.ioHomework_OOP/coverage/)
 
 После запуска pytest --cov-report html подробный отчет доступен в папке htmlcov/index.html
 
