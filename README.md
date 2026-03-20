@@ -22,7 +22,7 @@
 * **Models** — проверка логики инициализации и методов классов.
 
 Вы можете просмотреть подробный интерактивный отчет о покрытии кода тестами по ссылке:  
-<a href="https://burmspb-code.github.io/Homework_OOP/coverage/" target="_blank">👉 Посмотреть Coverage Report</a>
+[👉 Посмотреть Coverage Report](https://burmspb-code.github.io/Homework_OOP/coverage/)
 
 
 **Используемые модули:**
