@@ -2,10 +2,11 @@ name: CI/CD - Build, Test and Deploy
 
 on:
   push:
-    branches: [ "main", "feature/**" ] # Укажите вашу основную ветку
+    # Запускается в main и во всех ветках, начинающихся на feature/
+    branches: [ "main", "feature/**" ]
 
 permissions:
-  contents: write # Нужно для публикации в gh-pages
+  contents: write
 
 jobs:
   build-and-deploy:
@@ -28,24 +29,30 @@ jobs:
 
       - name: Run tests and generate coverage
         run: |
-          # Запускаем тесты, создаем HTML-отчет в папке htmlcov
-          # --cov=src (замените src на имя вашей папки с кодом)
+          # Запускаем тесты и создаем отчет в папке htmlcov
           pytest --cov=src --cov-report=html --cov-report=term-missing
 
       - name: Prepare Deployment Directory
         run: |
-          # Создаем общую папку для деплоя
-          mkdir -p public
+          # 1. Создаем временную папку для деплоя
+          mkdir -p public/coverage
           
-          # 1. Копируем файлы вашего основного проекта (например, index.html и т.д.)
-          # Замените '.' на папку с вашим сайтом, если она отдельная
-          cp -r . public/ || true 
+          # 2. Создаем файл .nojekyll, чтобы GitHub Pages не игнорировал папку coverage
+          touch public/.nojekyll
           
-          # 2. Переносим отчет о тестах в подпапку 'coverage'
-          mv htmlcov public/coverage
+          # 3. Переносим содержимое отчета в папку coverage
+          if [ -d "htmlcov" ]; then
+            cp -r htmlcov/* public/coverage/
+          else
+            echo "Error: htmlcov directory not found!" && exit 1
+          fi
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public # Публикуем всё содержимое папки public
+          publish_dir: ./public
+          publish_branch: gh-pages
+          # Очищаем ветку от старых файлов, чтобы избежать мусора
+          force_orphan: true 
+          
