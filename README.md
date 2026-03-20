@@ -25,7 +25,7 @@
 ![Coverage Badge](https://img.shields.io) 
 
 Вы можете просмотреть подробный интерактивный отчет о покрытии кода тестами по ссылке:  
-[👉 Посмотреть Coverage Report](https://burmspb-code.github.ioHomework_OOP/coverage/)
+[👉 Посмотреть Coverage Report](https://burmspb-code.github.io/Homework_OOP/coverage/)
 
 После запуска pytest --cov-report html подробный отчет доступен в папке htmlcov/index.html
 
