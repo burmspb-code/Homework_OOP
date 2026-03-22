@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from typing import Any
 
 
 class Product:
@@ -29,13 +30,15 @@ class Product:
         return cost_self + cost_other
 
     @classmethod
-    def new_product(cls, params: dict, products_list: list = None):
+    def new_product(cls, params: dict, products_list: list[Any] | None = None):
         """Принимает параметры товара в словаре и возвращает созданный объект класса Product."""
         if products_list:
             for product in products_list:
                 if product.name == params.get("name"):  # Если такой товар уже есть.
-                    product.quantity += params.get("quantity") # Добавляем количество.
-                    product.price = max(product.price, params.get("price"))  # Берем максимальную цену.
+                    product.quantity += params.get("quantity")  # Добавляем количество.
+                    product.price = max(
+                        product.price, params.get("price")
+                    )  # Берем максимальную цену.
                     return product
 
         return cls(**params)
@@ -51,8 +54,8 @@ class Product:
         if price <= 0:
             print("Цена не должна быть нулевая или отрицательная")
         elif price < self.__price:
-             answer = input("y/n : ")
-             if answer == "y":
+            answer = input("y/n : ")
+            if answer == "y":
                 self.__price = price
         else:
             self.__price = price
@@ -97,17 +100,22 @@ class Category:
     @property
     def products(self):
         """Возвращает список товаров."""
-        return [f"{prod.name}, {prod.price} руб. Остаток: {prod.quantity} шт." for prod in self.__products]
+        return [
+            f"{prod.name}, {prod.price} руб. Остаток: {prod.quantity} шт."
+            for prod in self.__products
+        ]
+
 
 class IteratorCategoryProducts:
     """Класс для итерации по товарам заданной категории."""
+
     def __init__(self, category: Category):
         self.category = category
 
     def __iter__(self):
         """Создание итератора."""
-        self.value_counter = 0 # Инициализируем счетчик продуктов
-        self.items = self.category.get_products_list() # Получаем список продуктов
+        self.value_counter = 0  # Инициализируем счетчик продуктов
+        self.items = self.category.get_products_list()  # Получаем список продуктов
         return self
 
     def __next__(self):
@@ -118,6 +126,7 @@ class IteratorCategoryProducts:
             return product
         else:
             raise StopIteration
+
 
 def load_object_from_json(
     file_path: str | Path,

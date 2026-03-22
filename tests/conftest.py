@@ -46,6 +46,7 @@ def json_data() -> list[dict]:
         }
     ]
 
+
 @pytest.fixture
 def product_data_1() -> dict:
     """Возвращает тестовый продукт как словарь."""
@@ -56,6 +57,7 @@ def product_data_1() -> dict:
         "quantity": 10,
     }
 
+
 @pytest.fixture
 def product_data_2() -> dict:
     """Возвращает тестовый продукт как словарь."""
@@ -65,6 +67,7 @@ def product_data_2() -> dict:
         "price": 190000.0,
         "quantity": 10,
     }
+
 
 @pytest.fixture
 def product_data_3() -> Product:
