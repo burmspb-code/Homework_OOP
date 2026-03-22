@@ -22,6 +22,12 @@ class Product:
         """Строковое описание объекта класса Product."""
         return f"{self.name}, {self.price} руб. Остаток: {self.quantity} шт."
 
+    def __add__(self, other):
+        """Подсчет стоимости всех товаров на складе."""
+        cost_self = self.quantity * self.price
+        cost_other = other.quantity * other.price
+        return cost_self + cost_other
+
     @classmethod
     def new_product(cls, params: dict, products_list: list = None):
         """Принимает параметры товара в словаре и возвращает созданный объект класса Product."""
@@ -79,17 +85,39 @@ class Category:
         total_quantity = sum(product.quantity for product in self.__products)
         return f"{self.name}, количество продуктов: {total_quantity} шт."
 
-
     def add_product(self, product: Product):
         """Добавление товара в список товаров."""
         self.__products.append(product)
         Category.product_count += 1
 
+    def get_products_list(self):
+        """Возвращает список продуктов."""
+        return self.__products
+
     @property
     def products(self):
         """Возвращает список товаров."""
-        return [f"{prod.name}, {prod.price} руб. Остаток: {prod.quantity} шт.\n" for prod in self.__products]
+        return [f"{prod.name}, {prod.price} руб. Остаток: {prod.quantity} шт." for prod in self.__products]
 
+class IteratorCategoryProducts:
+    """Класс для итерации по товарам заданной категории."""
+    def __init__(self, category: Category):
+        self.category = category
+
+    def __iter__(self):
+        """Создание итератора."""
+        self.value_counter = 0 # Инициализируем счетчик продуктов
+        self.items = self.category.get_products_list() # Получаем список продуктов
+        return self
+
+    def __next__(self):
+        """Возвращает следующий итерируемый объект."""
+        if self.value_counter < len(self.items):
+            product = self.items[self.value_counter]
+            self.value_counter += 1
+            return product
+        else:
+            raise StopIteration
 
 def load_object_from_json(
     file_path: str | Path,
