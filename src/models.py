@@ -18,6 +18,10 @@ class Product:
         self.__price = price
         self.quantity = quantity
 
+    def __str__(self):
+        """Строковое описание объекта класса Product."""
+        return f"{self.name}, {self.price} руб. Остаток: {self.quantity} шт."
+
     @classmethod
     def new_product(cls, params: dict, products_list: list = None):
         """Принимает параметры товара в словаре и возвращает созданный объект класса Product."""
@@ -69,6 +73,12 @@ class Category:
 
         Category.category_count += 1  # Увеличиваем счетчик категорий
         Category.product_count += len(products)  # Подсчитываем общее количество товаров
+
+    def __str__(self):
+        """Строковое описание объекта класса Category."""
+        total_quantity = sum(product.quantity for product in self.__products)
+        return f"{self.name}, количество продуктов: {total_quantity} шт."
+
 
     def add_product(self, product: Product):
         """Добавление товара в список товаров."""
