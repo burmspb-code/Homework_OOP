@@ -4,8 +4,8 @@ from src.models import Product
 class Smartphone(Product):
     """Класс товаров Smartphone - наследник класса Product."""
 
-    def __init__(self, name: str, description: str, price: float, quantity: int, efficiency: str, model: str,
-                 memory: str, color: str):
+    def __init__(self, name: str, description: str, price: float, quantity: int, efficiency: float, model: str,
+                 memory: int, color: str):
         super().__init__(name, description, price, quantity)
         self.efficiency = efficiency
         self.model = model
@@ -15,10 +15,9 @@ class Smartphone(Product):
     def __add__(self, other):
         """Сложение продуктов одинокового класса."""
         if type(other) is Smartphone:
-            return self.quantity + other.quantity
+            return (self.quantity * self.price) + (other.quantity * other.price)
         else:
-            return TypeError
-
+            raise TypeError
 
 
 class LawnGrass(Product):
@@ -34,9 +33,10 @@ class LawnGrass(Product):
     def __add__(self, other):
         """Сложение продуктов одинокового класса."""
         if type(other) is LawnGrass:
-            return self.quantity + other.quantity
+            return (self.quantity * self.price) + (other.quantity * other.price)
         else:
-            return TypeError
+            raise TypeError
+
 
 if __name__ == "__main__":
     smart_1 = Smartphone("Iphone", "15", 200000.0, 10, "Gud", "6G", "1024K", "Black")
@@ -46,7 +46,3 @@ if __name__ == "__main__":
     lawngrass_2 = LawnGrass("Мятлик луговой", "Плотный покров", 1250.0, 5, "Нидерланды", "21-28 дней", "Изумрудный")
 
     print(lawngrass_1 + lawngrass_2)
-
-
-
-

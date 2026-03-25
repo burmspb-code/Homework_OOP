@@ -23,9 +23,12 @@ class Product:
 
     def __add__(self, other):
         """Подсчет стоимости всех товаров на складе."""
-        cost_self = self.quantity * self.price
-        cost_other = other.quantity * other.price
-        return cost_self + cost_other
+        if issubclass(type(other), type(self)):
+            cost_self = self.quantity * self.price
+            cost_other = other.quantity * other.price
+            return cost_self + cost_other
+        else:
+            raise TypeError
 
     @classmethod
     def new_product(cls, params: dict, products_list: list[Any] | None = None):
@@ -88,8 +91,11 @@ class Category:
 
     def add_product(self, product: Product):
         """Добавление товара в список товаров."""
-        self.__products.append(product)
-        Category.product_count += 1
+        if isinstance(product, Product):
+            self.__products.append(product)
+            Category.product_count += 1
+        else:
+            raise TypeError
 
     def get_products_list(self):
         """Возвращает список продуктов."""
