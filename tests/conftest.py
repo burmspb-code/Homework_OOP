@@ -24,7 +24,7 @@ def list_categories(list_products) -> list[Category]:
 
 @pytest.fixture
 def json_data() -> list[dict]:
-    """Вовращает тестовый JSON."""
+    """Возвращает тестовый JSON."""
     return [
         {
             "name": "Смартфоны",
@@ -46,9 +46,10 @@ def json_data() -> list[dict]:
         }
     ]
 
+
 @pytest.fixture
 def product_data_1() -> dict:
-    """Возвращает тестовый проукт как словарь."""
+    """Возвращает тестовый продукт как словарь."""
     return {
         "name": "Samsung S23",
         "description": "256GB",
@@ -56,9 +57,10 @@ def product_data_1() -> dict:
         "quantity": 10,
     }
 
+
 @pytest.fixture
 def product_data_2() -> dict:
-    """Возвращает тестовый проукт как словарь."""
+    """Возвращает тестовый продукт как словарь."""
     return {
         "name": "Iphone 15",
         "description": "512GB, Gray",
@@ -66,7 +68,8 @@ def product_data_2() -> dict:
         "quantity": 10,
     }
 
+
 @pytest.fixture
 def product_data_3() -> Product:
-    """Возвразщает обоъект класса Product."""
+    """Возвращает объект класса Product."""
     return Product("Iphone 15", "Gray", 200000.0, 10)
