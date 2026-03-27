@@ -1,5 +1,3 @@
-import json
-from pathlib import Path
 from typing import Any
 
 
@@ -25,9 +23,12 @@ class Product:
 
     def __add__(self, other):
         """Подсчет стоимости всех товаров на складе."""
-        cost_self = self.quantity * self.price
-        cost_other = other.quantity * other.price
-        return cost_self + cost_other
+        if issubclass(type(other), type(self)):
+            cost_self = self.quantity * self.price
+            cost_other = other.quantity * other.price
+            return cost_self + cost_other
+        else:
+            raise TypeError
 
     @classmethod
     def new_product(cls, params: dict, products_list: list[Any] | None = None):
@@ -68,8 +69,8 @@ class Category:
       name: str - Название категории.
       description: str - Описание товара.
       __products: str - Список товаров категории (приватный аргумент).
-      category_count: int - Обший счетчик категорий товаров (атрибус класса).
-      product_count: int - Общий счетчик товаров (атрибус класса).
+      category_count: int - Обший счетчик категорий товаров (атрибут класса).
+      product_count: int - Общий счетчик товаров (атрибут класса).
     """
 
     category_count: int = 0
@@ -90,8 +91,11 @@ class Category:
 
     def add_product(self, product: Product):
         """Добавление товара в список товаров."""
-        self.__products.append(product)
-        Category.product_count += 1
+        if isinstance(product, Product):
+            self.__products.append(product)
+            Category.product_count += 1
+        else:
+            raise TypeError
 
     def get_products_list(self):
         """Возвращает список продуктов."""
@@ -126,38 +130,3 @@ class IteratorCategoryProducts:
             return product
         else:
             raise StopIteration
-
-
-def load_object_from_json(
-    file_path: str | Path,
-) -> tuple[list[Category], list[Product]]:
-    """Загрузка объектов для класса Category и Product из файла JSON"""
-
-    with open(file_path, "r", encoding="utf-8") as file:
-        data = json.load(file)
-
-    category_objects = []  # Создаем список для категорий
-    product_object = []  # Создаем список для товаров
-
-    for cat in data:
-        products = []  # Создаем список объектов товаров для этой категории
-        for prod in cat.get("products", []):
-            product = Product(
-                name=prod.get("name"),
-                description=prod.get("description"),
-                price=prod.get("price"),
-                quantity=prod.get("quantity"),
-            )
-            products.append(product)
-
-        category_objects.append(
-            Category(
-                name=cat.get("name"),
-                description=cat.get("description"),
-                products=products,
-            )
-        )
-
-        product_object.extend(products)
-
-    return category_objects, product_object

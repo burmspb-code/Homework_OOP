@@ -1,6 +1,14 @@
 import pytest
 
 from src.models import Category, Product
+from src.product_classes import LawnGrass, Smartphone
+
+
+@pytest.fixture(autouse=True)
+def reset_count():
+    """Сбрасывает счетчик категорий перед каждым тестом."""
+    Category.category_count = 0
+    Category.product_count = 0
 
 
 @pytest.fixture
@@ -19,6 +27,61 @@ def list_categories(list_products) -> list[Category]:
     return [
         Category("Smartphones", "Modern communication devices", list_products[0:2]),
         Category("Budget Phones", "Affordable devices", [list_products[2]]),
+    ]
+
+
+@pytest.fixture
+def list_smartphones() -> list[Smartphone]:
+    """Возвращает список тестовых объектов смартфон класса Smartphone."""
+    return [
+        Smartphone(
+            "Samsung Galaxy S23 Ultra",
+            "256GB, Серый цвет, 200MP камера",
+            180000.0,
+            5,
+            95.5,
+            "S23 Ultra",
+            256,
+            "Серый",
+        ),
+        Smartphone(
+            "Iphone 15", "512GB, Gray space", 210000.0, 8, 98.2, "15", 512, "Gray space"
+        ),
+        Smartphone(
+            "Xiaomi Redmi Note 11",
+            "1024GB, Синий",
+            31000.0,
+            14,
+            90.3,
+            "Note 11",
+            1024,
+            "Синий",
+        ),
+    ]
+
+
+@pytest.fixture
+def list_lawngrass() -> list[LawnGrass]:
+    """Возвращает список тестовых объектов класса LawnGrass."""
+    return [
+        LawnGrass(
+            "Газонная трава",
+            "Элитная трава для газона",
+            500.0,
+            20,
+            "Россия",
+            "7 дней",
+            "Зеленый",
+        ),
+        LawnGrass(
+            "Газонная трава 2",
+            "Выносливая трава",
+            450.0,
+            15,
+            "США",
+            "5 дней",
+            "Темно-зеленый",
+        ),
     ]
 
 
