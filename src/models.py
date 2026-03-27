@@ -69,8 +69,8 @@ class Category:
       name: str - Название категории.
       description: str - Описание товара.
       __products: str - Список товаров категории (приватный аргумент).
-      category_count: int - Обший счетчик категорий товаров (атрибус класса).
-      product_count: int - Общий счетчик товаров (атрибус класса).
+      category_count: int - Обший счетчик категорий товаров (атрибут класса).
+      product_count: int - Общий счетчик товаров (атрибут класса).
     """
 
     category_count: int = 0

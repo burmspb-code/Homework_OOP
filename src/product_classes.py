@@ -37,12 +37,3 @@ class LawnGrass(Product):
         else:
             raise TypeError
 
-
-if __name__ == "__main__":
-    smart_1 = Smartphone("Iphone", "15", 200000.0, 10, "Gud", "6G", "1024K", "Black")
-    smart_2 = Smartphone("Samsung Galaxy", "S23", 230000.0, 5, "Gud+", "5G", "1024K", "Blue")
-
-    lawngrass_1 = LawnGrass("Газон 'Городской", "Устойчивая", 450.0, 15, "Россия", "10-14 дней", "Темно-зеленый")
-    lawngrass_2 = LawnGrass("Мятлик луговой", "Плотный покров", 1250.0, 5, "Нидерланды", "21-28 дней", "Изумрудный")
-
-    print(lawngrass_1 + lawngrass_2)
