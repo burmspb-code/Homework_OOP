@@ -1,7 +1,6 @@
 import pytest
 
-from src.product_classes import Smartphone, LawnGrass
-from tests.conftest import list_smartphones
+from src.product_classes import LawnGrass, Smartphone
 
 
 def test_smartphone_creation(list_smartphones: list[Smartphone]) -> None:
@@ -31,14 +30,17 @@ def test_smartphone_addition(list_smartphones: list[Smartphone]) -> None:
     """Тест сложения Smartphones одинокового класса."""
     assert list_smartphones[0] + list_smartphones[1] == 2580000
 
+
 def test_smartphones_addition_error(list_smartphones: list[Smartphone]) -> None:
     """Тест сложение объекта класса Smartphone с объектом другого класса."""
     with pytest.raises(TypeError):
         list_smartphones[0] + 1
 
+
 def test_lawngrass_addition(list_lawngrass: list[LawnGrass]) -> None:
     """Тест сложения LawnGrass одинокового класса."""
     assert list_lawngrass[0] + list_lawngrass[1] == 16750.0
+
 
 def test_lawngrass_addition_error(list_lawngrass: list[LawnGrass]) -> None:
     """Тест сложение объекта класса LawnGrass с объектом другого класса."""

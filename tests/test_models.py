@@ -2,11 +2,7 @@ from typing import Any
 
 import pytest
 
-from src.models import (
-    Category,
-    IteratorCategoryProducts,
-    Product
-)
+from src.models import Category, IteratorCategoryProducts, Product
 
 
 def test_product_creation(list_products: list[Product]) -> None:
@@ -22,7 +18,9 @@ def test_category_creation(list_categories: list[Category]) -> None:
     assert Category.product_count == 3
 
 
-def test_new_product_not_in_list(product_data_1: dict, list_products: list[Product]) -> None:
+def test_new_product_not_in_list(
+    product_data_1: dict, list_products: list[Product]
+) -> None:
     """Тест добавления нового продукта, которого нет в списке товаров."""
     new_product = Product.new_product(product_data_1, list_products)
 
@@ -31,7 +29,9 @@ def test_new_product_not_in_list(product_data_1: dict, list_products: list[Produ
     assert new_product.quantity == product_data_1["quantity"]
 
 
-def test_new_category_in_list(product_data_2: dict, list_products: list[Product]) -> None:
+def test_new_category_in_list(
+    product_data_2: dict, list_products: list[Product]
+) -> None:
     """Тест добавления нового товара, который есть в списке товаров."""
     new_product = Product.new_product(product_data_2, list_products)
 
@@ -39,13 +39,13 @@ def test_new_category_in_list(product_data_2: dict, list_products: list[Product]
     assert new_product.quantity == 18
 
 
-def test_price_setter_increase(product_data_3: dict) -> None:
+def test_price_setter_increase(product_data_3: Product) -> None:
     """Тест обычного повышения цены (не требует подтверждения)."""
     product_data_3.price = 210000.0
     assert product_data_3.price == 210000.0
 
 
-def test_price_setter_invalid(product_data_3: dict, capsys) -> None:
+def test_price_setter_invalid(product_data_3: Product, capsys) -> None:
     """Тест установки отрицательной цены (не должна измениться)."""
     product_data_3.price = -100
     captured = capsys.readouterr()
@@ -53,7 +53,7 @@ def test_price_setter_invalid(product_data_3: dict, capsys) -> None:
     assert product_data_3.price == 200000.0  # Цена осталась прежней
 
 
-def test_price_setter_decrease_confirm(product_data_3: dict, monkeypatch) -> None:
+def test_price_setter_decrease_confirm(product_data_3: Product, monkeypatch) -> None:
     """Тест снижения цены с подтверждением 'y'."""
     # Имитируем ввод 'y' в консоль
     monkeypatch.setattr("builtins.input", lambda _: "y")
@@ -62,7 +62,7 @@ def test_price_setter_decrease_confirm(product_data_3: dict, monkeypatch) -> Non
     assert product_data_3.price == 150000.0
 
 
-def test_price_setter_decrease_reject(product_data_3: dict, monkeypatch):
+def test_price_setter_decrease_reject(product_data_3: Product, monkeypatch):
     """Тест отмены снижения цены (ввод 'n')."""
     # Имитируем ввод 'n' в консоль
     monkeypatch.setattr("builtins.input", lambda _: "n")
@@ -156,10 +156,12 @@ def test_iterator_restart(list_categories: list[Category]) -> None:
 
     assert len(first_run) == len(second_run) == 2
 
+
 def test_category_addition_error(list_products: list[Product]) -> None:
     """Тест возбуждения ошибки при сложении объектов разных классов."""
     with pytest.raises(TypeError):
         list_products[0] + 1
+
 
 def test_category_add_product_error(list_categories: list[Category]) -> None:
     """Тест возбуждения ошибки при добавлении объекта другого класса в категорию товаров."""

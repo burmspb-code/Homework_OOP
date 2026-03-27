@@ -1,7 +1,7 @@
 import json
 
 from src.load_data import load_object_from_json
-from src.models import Product, Category
+from src.models import Category, Product
 
 
 def test_load_object_from_json(json_data, tmp_path):
