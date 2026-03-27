@@ -2,6 +2,12 @@ import pytest
 
 from src.models import Category, Product
 
+@pytest.fixture(autouse=True)
+def reset_count():
+    """Сбрасывает счетчик категорий перед каждым тестом."""
+    Category.category_count = 0
+    Category.product_count = 0
+
 
 @pytest.fixture
 def list_products() -> list[Product]:
