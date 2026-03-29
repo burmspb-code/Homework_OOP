@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import Any
 
+from src.mixins import MixinLog
+
 
 class BaseProduct(ABC):
     """
@@ -30,14 +32,14 @@ class BaseProduct(ABC):
         """Получение цены товара."""
         pass
 
-    @abstractmethod
     @price.setter
+    @abstractmethod
     def price(self, price: float):
         """Установливание новой цены товара."""
         pass
 
 
-class Product(BaseProduct):
+class Product(MixinLog, BaseProduct):
     """Класс для описания свойств товара.
 
     Attributes:
@@ -52,6 +54,9 @@ class Product(BaseProduct):
         self.description = description
         self.__price = price
         self.quantity = quantity
+
+        # Передаем аргументы дальше по цепочке MRO (в MixinLog и далее)
+        super().__init__(name, description, price, quantity)
 
     def __str__(self):
         """Строковое описание объекта класса Product."""
