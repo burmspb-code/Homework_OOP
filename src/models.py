@@ -1,7 +1,43 @@
+from abc import ABC, abstractmethod
 from typing import Any
 
 
-class Product:
+class BaseProduct(ABC):
+    """
+        Абстрактный базовый класс для всех типов товаров.
+        Определяет обязательный интерфейс для работы с ценой,
+        складированием и операциями сложения.
+    """
+    @abstractmethod
+    def __str__(self) -> str:
+        """Выводит строковое описание объекта."""
+        pass
+
+    @abstractmethod
+    def __add__(self, other: Any) -> float:
+        """Подсчет стоимости всех товаров на складе."""
+        pass
+
+    @classmethod
+    @abstractmethod
+    def new_product(cls, params: dict, products_list: list[Any] | None = None):
+        """Логика добавления нового товара."""
+        pass
+
+    @property
+    @abstractmethod
+    def price(self) -> float:
+        """Получение цены товара."""
+        pass
+
+    @abstractmethod
+    @price.setter
+    def price(self, price: float):
+        """Установливание новой цены товара."""
+        pass
+
+
+class Product(BaseProduct):
     """Класс для описания свойств товара.
 
     Attributes:
@@ -46,12 +82,12 @@ class Product:
 
     @property
     def price(self):
-        """Получаем цену проукта."""
+        """Получаем цену продукта."""
         return self.__price
 
     @price.setter
     def price(self, price: float):
-        """Устанавливаем цену проукта."""
+        """Устанавливаем цену продукта."""
         if price <= 0:
             print("Цена не должна быть нулевая или отрицательная")
         elif price < self.__price:
