@@ -1,0 +1,6 @@
+# Исключаем из проверки покрытия аобстрактные классы
+
+[report]
+exclude_lines =
+    @abstractmethod
+    pass

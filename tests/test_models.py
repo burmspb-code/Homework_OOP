@@ -2,7 +2,7 @@ from typing import Any
 
 import pytest
 
-from src.models import Category, IteratorCategoryProducts, Product
+from src.models import Category, IteratorCategoryProducts, Product, BaseProduct
 
 
 def test_product_creation(list_products: list[Product]) -> None:

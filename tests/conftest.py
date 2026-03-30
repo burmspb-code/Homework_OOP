@@ -1,6 +1,6 @@
 import pytest
 
-from src.models import Category, Product
+from src.models import Category, Product, BaseProduct
 from src.product_classes import LawnGrass, Smartphone
 
 
@@ -136,3 +136,7 @@ def product_data_2() -> dict:
 def product_data_3() -> Product:
     """Возвращает объект класса Product."""
     return Product("Iphone 15", "Gray", 200000.0, 10)
+
+@pytest.fixture
+def base_product() -> BaseProduct:
+    """Возвращает объект базового класса."""
