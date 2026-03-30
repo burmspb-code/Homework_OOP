@@ -6,10 +6,11 @@ from src.mixins import MixinLog
 
 class BaseProduct(ABC):
     """
-        Абстрактный базовый класс для всех типов товаров.
-        Определяет обязательный интерфейс для работы с ценой,
-        складированием и операциями сложения.
+    Абстрактный базовый класс для всех типов товаров.
+    Определяет обязательный интерфейс для работы с ценой,
+    складированием и операциями сложения.
     """
+
     @abstractmethod
     def __str__(self) -> str:
         """Выводит строковое описание объекта."""
@@ -78,9 +79,7 @@ class Product(MixinLog, BaseProduct):
             for product in products_list:
                 if product.name == params.get("name"):  # Если такой товар уже есть.
                     product.quantity += params.get("quantity")  # Добавляем количество.
-                    product.price = max(
-                        product.price, params.get("price")
-                    )  # Берем максимальную цену.
+                    product.price = max(product.price, params.get("price"))  # Берем максимальную цену.
                     return product
 
         return cls(**params)
@@ -145,10 +144,7 @@ class Category:
     @property
     def products(self):
         """Возвращает список товаров."""
-        return [
-            f"{prod.name}, {prod.price} руб. Остаток: {prod.quantity} шт."
-            for prod in self.__products
-        ]
+        return [f"{prod.name}, {prod.price} руб. Остаток: {prod.quantity} шт." for prod in self.__products]
 
 
 class IteratorCategoryProducts:

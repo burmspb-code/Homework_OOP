@@ -1,4 +1,3 @@
-from src.mixins import MixinLog
 from src.models import Product
 
 

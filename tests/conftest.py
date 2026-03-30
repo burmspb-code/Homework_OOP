@@ -1,6 +1,6 @@
 import pytest
 
-from src.models import Category, Product, BaseProduct
+from src.models import Category, Product
 from src.product_classes import LawnGrass, Smartphone
 
 
@@ -44,9 +44,7 @@ def list_smartphones() -> list[Smartphone]:
             256,
             "Серый",
         ),
-        Smartphone(
-            "Iphone 15", "512GB, Gray space", 210000.0, 8, 98.2, "15", 512, "Gray space"
-        ),
+        Smartphone("Iphone 15", "512GB, Gray space", 210000.0, 8, 98.2, "15", 512, "Gray space"),
         Smartphone(
             "Xiaomi Redmi Note 11",
             "1024GB, Синий",
@@ -136,7 +134,3 @@ def product_data_2() -> dict:
 def product_data_3() -> Product:
     """Возвращает объект класса Product."""
     return Product("Iphone 15", "Gray", 200000.0, 10)
-
-@pytest.fixture
-def base_product() -> BaseProduct:
-    """Возвращает объект базового класса."""

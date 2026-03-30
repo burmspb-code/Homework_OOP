@@ -2,7 +2,7 @@ from typing import Any
 
 import pytest
 
-from src.models import Category, IteratorCategoryProducts, Product, BaseProduct
+from src.models import Category, IteratorCategoryProducts, Product
 
 
 def test_product_creation(list_products: list[Product]) -> None:
@@ -18,9 +18,7 @@ def test_category_creation(list_categories: list[Category]) -> None:
     assert Category.product_count == 3
 
 
-def test_new_product_not_in_list(
-    product_data_1: dict, list_products: list[Product]
-) -> None:
+def test_new_product_not_in_list(product_data_1: dict, list_products: list[Product]) -> None:
     """Тест добавления нового продукта, которого нет в списке товаров."""
     new_product = Product.new_product(product_data_1, list_products)
 
@@ -29,9 +27,7 @@ def test_new_product_not_in_list(
     assert new_product.quantity == product_data_1["quantity"]
 
 
-def test_new_category_in_list(
-    product_data_2: dict, list_products: list[Product]
-) -> None:
+def test_new_category_in_list(product_data_2: dict, list_products: list[Product]) -> None:
     """Тест добавления нового товара, который есть в списке товаров."""
     new_product = Product.new_product(product_data_2, list_products)
 
