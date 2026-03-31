@@ -1,7 +1,46 @@
+from abc import ABC, abstractmethod
 from typing import Any
 
+from src.mixins import MixinLog
 
-class Product:
+
+class BaseProduct(ABC):
+    """
+    Абстрактный базовый класс для всех типов товаров.
+    Определяет обязательный интерфейс для работы с ценой,
+    складированием и операциями сложения.
+    """
+
+    @abstractmethod
+    def __str__(self) -> str:
+        """Выводит строковое описание объекта."""
+        pass
+
+    @abstractmethod
+    def __add__(self, other: Any) -> float:
+        """Подсчет стоимости всех товаров на складе."""
+        pass
+
+    @classmethod
+    @abstractmethod
+    def new_product(cls, params: dict, products_list: list[Any] | None = None):
+        """Логика добавления нового товара."""
+        pass
+
+    @property
+    @abstractmethod
+    def price(self) -> float:
+        """Получение цены товара."""
+        pass
+
+    @price.setter
+    @abstractmethod
+    def price(self, price: float):
+        """Установливание новой цены товара."""
+        pass
+
+
+class Product(MixinLog, BaseProduct):
     """Класс для описания свойств товара.
 
     Attributes:
@@ -16,6 +55,9 @@ class Product:
         self.description = description
         self.__price = price
         self.quantity = quantity
+
+        # Передаем аргументы дальше по цепочке MRO (в MixinLog и далее)
+        super().__init__(name, description, price, quantity)
 
     def __str__(self):
         """Строковое описание объекта класса Product."""
@@ -37,21 +79,19 @@ class Product:
             for product in products_list:
                 if product.name == params.get("name"):  # Если такой товар уже есть.
                     product.quantity += params.get("quantity")  # Добавляем количество.
-                    product.price = max(
-                        product.price, params.get("price")
-                    )  # Берем максимальную цену.
+                    product.price = max(product.price, params.get("price"))  # Берем максимальную цену.
                     return product
 
         return cls(**params)
 
     @property
     def price(self):
-        """Получаем цену проукта."""
+        """Получаем цену продукта."""
         return self.__price
 
     @price.setter
     def price(self, price: float):
-        """Устанавливаем цену проукта."""
+        """Устанавливаем цену продукта."""
         if price <= 0:
             print("Цена не должна быть нулевая или отрицательная")
         elif price < self.__price:
@@ -104,10 +144,7 @@ class Category:
     @property
     def products(self):
         """Возвращает список товаров."""
-        return [
-            f"{prod.name}, {prod.price} руб. Остаток: {prod.quantity} шт."
-            for prod in self.__products
-        ]
+        return [f"{prod.name}, {prod.price} руб. Остаток: {prod.quantity} шт." for prod in self.__products]
 
 
 class IteratorCategoryProducts:

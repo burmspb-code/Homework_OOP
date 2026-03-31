@@ -44,9 +44,7 @@ def list_smartphones() -> list[Smartphone]:
             256,
             "Серый",
         ),
-        Smartphone(
-            "Iphone 15", "512GB, Gray space", 210000.0, 8, 98.2, "15", 512, "Gray space"
-        ),
+        Smartphone("Iphone 15", "512GB, Gray space", 210000.0, 8, 98.2, "15", 512, "Gray space"),
         Smartphone(
             "Xiaomi Redmi Note 11",
             "1024GB, Синий",

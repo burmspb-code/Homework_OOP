@@ -15,13 +15,17 @@ class Smartphone(Product):
         memory: int,
         color: str,
     ):
-        super().__init__(name, description, price, quantity)
+
+        # Сначала сохраняем уникальные данные
         self.efficiency = efficiency
         self.model = model
         self.memory = memory
         self.color = color
 
-    def __add__(self, other):
+        # Потом вызываем родителя, для правильной логики работы Mixin
+        super().__init__(name, description, price, quantity)
+
+    def __add__(self, other) -> float:
         """Сложение продуктов одинокового класса."""
         if type(other) is Smartphone:
             return (self.quantity * self.price) + (other.quantity * other.price)
@@ -42,12 +46,16 @@ class LawnGrass(Product):
         germination_period: str,
         color: str,
     ):
-        super().__init__(name, description, price, quantity)
+
+        # Сначала сохраняем уникальные данные
         self.country = country
         self.germination_period = germination_period
         self.color = color
 
-    def __add__(self, other):
+        # Потом вызываем родителя, для правильной логики работы Mixin
+        super().__init__(name, description, price, quantity)
+
+    def __add__(self, other) -> float:
         """Сложение продуктов одинокового класса."""
         if type(other) is LawnGrass:
             return (self.quantity * self.price) + (other.quantity * other.price)
