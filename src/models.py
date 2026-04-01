@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Any
 
+from src.exceptions import ZeroQuantityException
 from src.mixins import MixinLog
 
 
@@ -40,6 +41,19 @@ class BaseProduct(ABC):
         pass
 
 
+class BaseEntity(ABC):
+    """Абстрактный базовый класс для общих свойчт Категорий товаров и Заказов."""
+
+    def __init__(self, name: str, description: str):
+        self.name = name
+        self.description = description
+
+    @abstractmethod
+    def __str__(self) -> str:
+        """Выводит строковое описание объекта."""
+        pass
+
+
 class Product(MixinLog, BaseProduct):
     """Класс для описания свойств товара.
 
@@ -51,6 +65,8 @@ class Product(MixinLog, BaseProduct):
     """
 
     def __init__(self, name: str, description: str, price: float, quantity: int):
+        if quantity <= 0:
+            raise ValueError
         self.name = name
         self.description = description
         self.__price = price
@@ -102,7 +118,7 @@ class Product(MixinLog, BaseProduct):
             self.__price = price
 
 
-class Category:
+class Category(BaseEntity):
     """Класс для представления категорий товаров.
 
     Attributes:
@@ -116,11 +132,9 @@ class Category:
     category_count: int = 0
     product_count: int = 0
 
-    def __init__(self, name: str, description: str, products: list):
-        self.name = name
-        self.description = description
+    def __init__(self, name: str, description: str, products: list[Product]):
+        super().__init__(name, description)
         self.__products = products
-
         Category.category_count += 1  # Увеличиваем счетчик категорий
         Category.product_count += len(products)  # Подсчитываем общее количество товаров
 
@@ -131,11 +145,19 @@ class Category:
 
     def add_product(self, product: Product):
         """Добавление товара в список товаров."""
-        if isinstance(product, Product):
+        try:
+            if not isinstance(product, Product):
+                raise TypeError("Нельзя добавить товар другого класса")
+            if product.quantity == 0:
+                raise ZeroQuantityException
+        except (ZeroQuantityException, TypeError) as e:
+            print(e)
+        else:
             self.__products.append(product)
             Category.product_count += 1
-        else:
-            raise TypeError
+            print("Товар добавлен")
+        finally:
+            print("Обработка добавления товара завершена")
 
     def get_products_list(self):
         """Возвращает список продуктов."""
@@ -145,6 +167,15 @@ class Category:
     def products(self):
         """Возвращает список товаров."""
         return [f"{prod.name}, {prod.price} руб. Остаток: {prod.quantity} шт." for prod in self.__products]
+
+    def middle_price(self):
+        """Подсчет среднего ценника на продукты в категории."""
+        try:
+            result = sum(product.price for product in self.__products) / len(self.__products)
+            return round(result, 2)
+        except ZeroDivisionError:
+            print("Товар с нулевым количеством не может быть добавлен")
+            return 0
 
 
 class IteratorCategoryProducts:
@@ -167,3 +198,36 @@ class IteratorCategoryProducts:
             return product
         else:
             raise StopIteration
+
+
+class OrderProduct(BaseEntity):
+    """Класс для представления заказа на один товар, в котором будет ссылка на товар,
+    количество купленного товара, а также итоговая стоимость.
+    """
+
+    def __init__(self, name, descriptions, product: Product, quantity: int):
+        super().__init__(name, descriptions)
+
+        # Инициализируем параметры заранее, если вдруг произойдет ошибка,
+        # Защита от AttributeError при вызове метода __str__
+        self.product = product
+        self.quantity = 0
+        self.total_price = 0
+
+        # Если количество товаров равно 0 выбрасывается исключение ZeroQuantityException
+        try:
+            if quantity == 0:
+                raise ZeroQuantityException
+        except ZeroQuantityException as e:
+            print(str(e.message))
+        else:
+            self.product = product  # Ссылка на товар
+            self.price = product.price  # Цена товара
+            self.quantity = quantity  # Количество товара
+            self.total_price = product.price * quantity  # Подсчет стоимости товара
+            print("Товар добавлен")
+        finally:
+            print("Обработка добавления товара завершена")
+
+    def __str__(self):
+        return f"Заказ '{self.name}': {self.product.name}, " f"{self.quantity} шт. Итого: {self.total_price} руб."
