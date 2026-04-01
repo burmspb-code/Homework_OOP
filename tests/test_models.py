@@ -1,8 +1,10 @@
 from typing import Any
+from unittest.mock import MagicMock
 
 import pytest
 
-from src.models import Category, IteratorCategoryProducts, Product
+from src.exceptions import ZeroQuantityException
+from src.models import Category, IteratorCategoryProducts, Product, OrderProduct
 
 
 def test_product_creation(list_products: list[Product]) -> None:
@@ -159,8 +161,40 @@ def test_category_addition_error(list_products: list[Product]) -> None:
         list_products[0] + 1
 
 
-def test_category_add_product_error(list_categories: list[Category]) -> None:
+def test_category_add_product_error(capsys, list_categories: list[Category]) -> None:
     """Тест возбуждения ошибки при добавлении объекта другого класса в категорию товаров."""
     wrong_product: Any = 1
-    with pytest.raises(TypeError):
-        list_categories[0].add_product(wrong_product)
+    list_categories[0].add_product(wrong_product)
+    message = capsys.readouterr()
+    assert message.out.strip().split("\n")[-2] == "Нельзя добавить товар другого класса"
+    assert message.out.strip().split("\n")[-1] == "Обработка добавления товара завершена"
+
+
+def test_product_quantity_error() -> None:
+    """Тест добавления продукта с нулевым колчеством."""
+    with pytest.raises(ValueError):
+        Product("Бракованный товар", "Неверное количество", 1000.0, 0)
+
+def test_average_price_product(list_categories: list[Category]) -> None:
+    """Тест подсчета среднего ценника на продукты в категории."""
+    test_category = list_categories[0]
+    assert test_category.middle_price() == 152500
+
+    test_category_not_product = Category("Smartphones", "Modern communication devices", [])
+    assert test_category_not_product.middle_price() == 0
+
+def test_orders_add(list_products) -> None:
+    """Тест добавления заказа."""
+    product = list_products[0]
+    order = OrderProduct("№1", "Покупка смарфона", product, 5)
+
+    assert str(order) == "Заказ '№1': Samsung Galaxy S23, 5 шт. Итого: 475000.0 руб."
+
+def test_orders_exceptions_zero_product(capsys, list_products) -> None:
+    """Тест добавления продукта в Заказ с нулевым количеством."""
+    product = list_products[0]
+    OrderProduct("№1", "Покупка смарфона", product, 0)
+
+    message = capsys.readouterr()
+    assert message.out.strip().split("\n")[-2] == "Товар с нулевым количеством не может быть добавлен"
+    assert message.out.strip().split("\n")[-1] == "Обработка добавления товара завершена"

@@ -40,6 +40,7 @@ class BaseProduct(ABC):
         """Установливание новой цены товара."""
         pass
 
+
 class BaseEntity(ABC):
     """Абстрактный базовый класс для общих свойчт Категорий товаров и Заказов."""
 
@@ -64,10 +65,7 @@ class Product(MixinLog, BaseProduct):
     """
 
     def __init__(self, name: str, description: str, price: float, quantity: int):
-
-        if quantity <= 0:
-            raise ValueError("Товар с нулевым количеством не может быть добавлен")
-
+        if quantity <= 0: raise ValueError
         self.name = name
         self.description = description
         self.__price = price
@@ -146,11 +144,18 @@ class Category(BaseEntity):
 
     def add_product(self, product: Product):
         """Добавление товара в список товаров."""
-        if isinstance(product, Product):
+        try:
+            if not isinstance(product, Product): raise TypeError("Нельзя добавить товар другого класса")
+            if product.quantity == 0: raise ZeroQuantityException
+        except (ZeroQuantityException, TypeError) as e:
+            print(e)
+        else:
             self.__products.append(product)
             Category.product_count += 1
-        else:
-            raise TypeError
+            print("Товар добавлен")
+        finally:
+            print("Обработка добавления товара завершена")
+
 
     def get_products_list(self):
         """Возвращает список продуктов."""
@@ -161,12 +166,15 @@ class Category(BaseEntity):
         """Возвращает список товаров."""
         return [f"{prod.name}, {prod.price} руб. Остаток: {prod.quantity} шт." for prod in self.__products]
 
-    def average_price_products(self):
+    def middle_price(self):
         """Подсчет среднего ценника на продукты в категории."""
         try:
-            return sum(product.price for product in self.__products) / len(self.__products)
+            result = sum(product.price for product in self.__products) / len(self.__products)
+            return round(result, 2)
         except ZeroDivisionError:
+            print("Товар с нулевым количеством не может быть добавлен")
             return 0
+
 
 class IteratorCategoryProducts:
     """Класс для итерации по товарам заданной категории."""
@@ -189,6 +197,7 @@ class IteratorCategoryProducts:
         else:
             raise StopIteration
 
+
 class OrderProduct(BaseEntity):
     """Класс для представления заказа на один товар, в котором будет ссылка на товар,
      количество купленного товара, а также итоговая стоимость.
@@ -197,6 +206,13 @@ class OrderProduct(BaseEntity):
     def __init__(self, name, descriptions, product: Product, quantity: int):
         super().__init__(name, descriptions)
 
+        # Инициализируем параметры заранее, если вдруг произойдет ошибка,
+        # Защита от AttributeError при вызове метода __str__
+        self.product = product
+        self.quantity = 0
+        self.total_price = 0
+
+        # Если количество товаров равно 0 выбрасывается исключение ZeroQuantityException
         try:
             if quantity == 0:
                 raise ZeroQuantityException
@@ -204,13 +220,12 @@ class OrderProduct(BaseEntity):
             print(str(e.message))
         else:
             self.product = product  # Ссылка на товар
-            self.price = product.price # Цена товара
-            self.quantity = quantity # Количество товара
+            self.price = product.price  # Цена товара
+            self.quantity = quantity  # Количество товара
             self.total_price = product.price * quantity  # Подсчет стоимости товара
-            print("Продукт успешно добавлен.")
+            print("Товар добавлен")
         finally:
-            print("Обработка добавления продукта завершена.")
-
+            print("Обработка добавления товара завершена")
 
     def __str__(self):
         return (f"Заказ '{self.name}': {self.product.name}, "
