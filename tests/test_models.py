@@ -1,10 +1,8 @@
 from typing import Any
-from unittest.mock import MagicMock
 
 import pytest
 
-from src.exceptions import ZeroQuantityException
-from src.models import Category, IteratorCategoryProducts, Product, OrderProduct
+from src.models import Category, IteratorCategoryProducts, OrderProduct, Product
 
 
 def test_product_creation(list_products: list[Product]) -> None:
@@ -175,6 +173,7 @@ def test_product_quantity_error() -> None:
     with pytest.raises(ValueError):
         Product("Бракованный товар", "Неверное количество", 1000.0, 0)
 
+
 def test_average_price_product(list_categories: list[Category]) -> None:
     """Тест подсчета среднего ценника на продукты в категории."""
     test_category = list_categories[0]
@@ -183,12 +182,14 @@ def test_average_price_product(list_categories: list[Category]) -> None:
     test_category_not_product = Category("Smartphones", "Modern communication devices", [])
     assert test_category_not_product.middle_price() == 0
 
+
 def test_orders_add(list_products) -> None:
     """Тест добавления заказа."""
     product = list_products[0]
     order = OrderProduct("№1", "Покупка смарфона", product, 5)
 
     assert str(order) == "Заказ '№1': Samsung Galaxy S23, 5 шт. Итого: 475000.0 руб."
+
 
 def test_orders_exceptions_zero_product(capsys, list_products) -> None:
     """Тест добавления продукта в Заказ с нулевым количеством."""

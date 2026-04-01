@@ -65,7 +65,8 @@ class Product(MixinLog, BaseProduct):
     """
 
     def __init__(self, name: str, description: str, price: float, quantity: int):
-        if quantity <= 0: raise ValueError
+        if quantity <= 0:
+            raise ValueError
         self.name = name
         self.description = description
         self.__price = price
@@ -145,8 +146,10 @@ class Category(BaseEntity):
     def add_product(self, product: Product):
         """Добавление товара в список товаров."""
         try:
-            if not isinstance(product, Product): raise TypeError("Нельзя добавить товар другого класса")
-            if product.quantity == 0: raise ZeroQuantityException
+            if not isinstance(product, Product):
+                raise TypeError("Нельзя добавить товар другого класса")
+            if product.quantity == 0:
+                raise ZeroQuantityException
         except (ZeroQuantityException, TypeError) as e:
             print(e)
         else:
@@ -155,7 +158,6 @@ class Category(BaseEntity):
             print("Товар добавлен")
         finally:
             print("Обработка добавления товара завершена")
-
 
     def get_products_list(self):
         """Возвращает список продуктов."""
@@ -200,8 +202,8 @@ class IteratorCategoryProducts:
 
 class OrderProduct(BaseEntity):
     """Класс для представления заказа на один товар, в котором будет ссылка на товар,
-     количество купленного товара, а также итоговая стоимость.
-     """
+    количество купленного товара, а также итоговая стоимость.
+    """
 
     def __init__(self, name, descriptions, product: Product, quantity: int):
         super().__init__(name, descriptions)
@@ -228,5 +230,4 @@ class OrderProduct(BaseEntity):
             print("Обработка добавления товара завершена")
 
     def __str__(self):
-        return (f"Заказ '{self.name}': {self.product.name}, "
-                f"{self.quantity} шт. Итого: {self.total_price} руб.")
+        return f"Заказ '{self.name}': {self.product.name}, " f"{self.quantity} шт. Итого: {self.total_price} руб."
